@@ -16,6 +16,12 @@ by kkrainer
 int main(void) {
     srand(time(NULL)); // start RNG
 
+	//Open pbm
+	FILE *pbm = fopen("output.pbm", "w");
+
+	//check if null
+	(pbm == NULL)? exit(-1) : 0;
+
 	//mark start for use in a loop
 	start: ;
 
@@ -36,29 +42,34 @@ int main(void) {
 	printf("\n-10 == RAND\n-5 == Preset\n=> ");
 	scanf("%d", &start[0]);
 	getchar();
-
+	
 	//if preset chosen
 	if(start[0] == -5){
+
+		printf("\nLoops (recomended minimum is 30) => ");
+		scanf("%d", &loops);
+		getchar();
+
 		//set preset vars
-		start[0] = 10;
+		start[0] = 1;
 		start[1] = 25;
 		start[2] = 40;
 		start[3] = 35;
 		start[4] = 5;
-		starty[0] = 10;
+		starty[0] = 1;
 		starty[1] = 25;
 		starty[2] = 40;
 		starty[3] = 35;
 		starty[4] = 5;
 		width = 50;
 		height = 50;
-		loops = 150;
+
 		//print out for user
-		printf("start[0] = %d\n\
-		start[1] = %d\n\
-		start[2] = %d\n\
-		start[3] = %d\n\
-		start[4] = %d\n\
+		printf("start[0] = %d\
+		\nstart[1] = %d\
+		\nstart[2] = %d\
+		\nstart[3] = %d\
+		\nstart[4] = %d\
 		\nstarty[0] = %d\
 		\nstarty[1] = %d\
 		\nstarty[2] = %d\
@@ -66,7 +77,7 @@ int main(void) {
 		\nstarty[4] = %d\n\
 		\nwidth = %d\
 		\nheight = %d\
-		\nloops = %d\n Pressione [ENTER]\n",
+		\nloops = %d\nPress [ENTER]\n",
 		start[0], start[1], start[2], start[3],
 		start[4], starty[0], starty[1], starty[2],
 		starty[3], starty[4], height, width, loops);
@@ -76,23 +87,25 @@ int main(void) {
 	else if(start[0] == -10){
 		//set rerun to 1 so the loop can restart later
 		rerun++;
+
 		//set width and height. Ceiling = 70,  Floor = 15
 		width = rand() % (70 + 1 - 15) + 15;
 		height = rand() % (70 + 1 - 15) + 15;
+
 		//set other cars based off of that one
-		start[0] = rand() % width;
+		start[0] = 1;
 		start[1] = rand() % width;
 		start[2] = rand() % width;
 		start[3] = rand() % width;
 		start[4] = rand() % width;
-		starty[0] = rand() % height;
+		starty[0] = 1;
 		starty[1] = rand() % height;
 		starty[2] = rand() % height;
 		starty[3] = rand() % height;
 		starty[4] = rand() % height;
 
 		//fixed loop value
-		loops = 150;
+		loops = rand() % (150 + 1 - 30) + 30;
 
 		system("cls");
 
@@ -109,7 +122,7 @@ int main(void) {
 		\nstarty[4] = %d\n\
 		\nwidth = %d\
 		\nheight = %d\
-		\nloops = %d\nPressione [ENTER]\n",
+		\nloops = %d\nPress [ENTER]\n",
 		start[0], start[1], start[2], start[3],
 		start[4], starty[0], starty[1], starty[2],
 		starty[3], starty[4], height, width, loops);
@@ -173,6 +186,20 @@ int main(void) {
 		//clear
 		system("cls");
 
+	}
+
+	//print pbm header
+	fprintf(pbm, "P1 %d %d \n", width, height);
+
+	//same thing as printing loop, just to file
+	for(int h = 0; h < height; h++){
+
+		for(int w = 0; w != width; w++){ 						
+
+			//print value in arr[w][h] to file
+			fprintf(pbm, "%d ", arr[w][h]);
+		}
+		fprintf(pbm, "\n");
 	}
 
 	//If the input chose random (30% chance itll be ass)
